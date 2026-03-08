@@ -1,0 +1,827 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>魔法少女ノ魔女裁判 ✦ カップリングルーレット</title>
+<link href="https://fonts.googleapis.com/css2?family=Cinzel+Decorative:wght@400;700&family=Noto+Serif+JP:wght@300;400;600&family=IM+Fell+English+SC&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --ink: #0a0612;
+    --parchment: #f5e9d0;
+    --gold: #c9933a;
+    --gold-light: #f0c060;
+    --violet-mid: #7c3dab;
+    --mist: #c4a8e0;
+    --glow: #e8c4ff;
+    --silver: #c8b8d8;
+  }
+  * { margin:0; padding:0; box-sizing:border-box; }
+  body {
+    background-color: var(--ink);
+    background-image:
+      radial-gradient(ellipse 80% 60% at 50% 0%, #1a0830 0%, transparent 60%),
+      radial-gradient(ellipse 60% 40% at 20% 100%, #200a10 0%, transparent 50%),
+      radial-gradient(ellipse 60% 40% at 80% 100%, #0a0820 0%, transparent 50%),
+      url("data:image/svg+xml,%3Csvg width='60' height='60' xmlns='http://www.w3.org/2000/svg'%3E%3Ccircle cx='30' cy='30' r='0.5' fill='%23ffffff08'/%3E%3Ccircle cx='10' cy='10' r='0.3' fill='%23ffffff05'/%3E%3Ccircle cx='50' cy='20' r='0.4' fill='%23ffffff06'/%3E%3C/svg%3E");
+    min-height: 100vh;
+    font-family: 'Noto Serif JP', serif;
+    color: var(--parchment);
+    overflow-x: hidden;
+    position: relative;
+  }
+  body::before {
+    content:''; position:fixed; top:50%; left:50%;
+    transform:translate(-50%,-50%);
+    width:min(90vw,700px); height:min(90vw,700px);
+    background:radial-gradient(circle,transparent 30%,#2a0a4a08 50%,transparent 70%);
+    border-radius:50%; border:1px solid #4a187015;
+    animation:slowSpin 60s linear infinite;
+    pointer-events:none; z-index:0;
+  }
+  body::after {
+    content:''; position:fixed; top:50%; left:50%;
+    transform:translate(-50%,-50%) rotate(30deg);
+    width:min(70vw,500px); height:min(70vw,500px);
+    border-radius:50%; border:1px solid #c9933a10;
+    animation:slowSpin 40s linear infinite reverse;
+    pointer-events:none; z-index:0;
+  }
+  @keyframes slowSpin { to { transform:translate(-50%,-50%) rotate(360deg); } }
+
+  .wrapper {
+    position:relative; z-index:1;
+    max-width:840px; margin:0 auto;
+    padding:40px 20px 120px;
+    display:flex; flex-direction:column; gap:32px;
+  }
+
+  /* ── ① タイトル ── */
+  header { text-align:center; }
+  .header-ornament {
+    font-size:18px; color:var(--gold); letter-spacing:12px;
+    opacity:.7; display:block; margin-bottom:10px;
+    animation:flicker 4s ease-in-out infinite;
+  }
+  @keyframes flicker {
+    0%,90%,100%{opacity:.7}92%{opacity:.4}94%{opacity:.7}96%{opacity:.35}98%{opacity:.7}
+  }
+
+  .title-sub-game {
+    font-family:'IM Fell English SC',serif;
+    font-size:clamp(11px,2vw,15px); color:var(--mist);
+    letter-spacing:5px; opacity:.65; margin-bottom:10px;
+  }
+  h1 {
+    font-family:'Cinzel Decorative',serif;
+    font-size:clamp(26px,6vw,52px); font-weight:700;
+    color:var(--gold-light);
+    text-shadow:0 0 40px #c9933a70,0 0 80px #c9933a35;
+    letter-spacing:3px; line-height:1.2;
+  }
+  .title-sub-jp {
+    font-family:'Noto Serif JP',serif;
+    font-size:clamp(11px,1.8vw,14px); color:var(--silver);
+    margin-top:10px; letter-spacing:6px; opacity:.5;
+  }
+  .header-line {
+    width:180px; height:1px;
+    background:linear-gradient(90deg,transparent,var(--gold),transparent);
+    margin:12px auto 0;
+  }
+
+  /* ── ② 結果カード ── */
+  .couple-card {
+    width:100%;
+    background:linear-gradient(160deg,#1e0a38ee,#120520ee);
+    border:1px solid #c9933a40;
+    padding:44px 32px; text-align:center; position:relative;
+    clip-path:polygon(18px 0%,100% 0%,calc(100% - 18px) 100%,0% 100%);
+    min-height:160px; display:flex; flex-direction:column;
+    align-items:center; justify-content:center; gap:0;
+  }
+  .couple-card::before {
+    content:''; position:absolute; inset:0;
+    background:radial-gradient(ellipse at 50% 0%,#4a187025,transparent 60%);
+    pointer-events:none;
+  }
+  .corner {position:absolute;width:22px;height:22px;border-color:var(--gold);border-style:solid;opacity:.45;}
+  .corner-tl{top:10px;left:26px;border-width:1px 0 0 1px;}
+  .corner-tr{top:10px;right:10px;border-width:1px 1px 0 0;}
+  .corner-bl{bottom:10px;left:10px;border-width:0 0 1px 1px;}
+  .corner-br{bottom:10px;right:26px;border-width:0 1px 1px 0;}
+
+  .pair-row {
+    display:flex; align-items:center;
+    justify-content:center; flex-wrap:wrap; gap:8px;
+  }
+  .char-name {
+    font-family:'Noto Serif JP',serif;
+    font-size:clamp(22px,5vw,36px); font-weight:600; line-height:1.3;
+  }
+  .coupling-symbol {
+    font-family:'Cinzel Decorative',serif;
+    font-size:clamp(18px,3vw,26px); color:var(--gold);
+    margin:0 10px; text-shadow:0 0 15px #c9933a80;
+    animation:pulse 2s ease-in-out infinite; display:inline-block;
+  }
+  @keyframes pulse{0%,100%{transform:scale(1);opacity:1}50%{transform:scale(1.1);opacity:.8}}
+
+  .rating-row{margin-top:18px;display:flex;justify-content:center;gap:6px;}
+  .star{
+    font-size:18px;color:var(--gold);opacity:0;
+    transform:translateY(8px);transition:all 0.3s ease;cursor:pointer;
+  }
+  .star.lit{opacity:1;transform:translateY(0);text-shadow:0 0 10px #f0c06080;}
+  .placeholder-text{
+    font-family:'IM Fell English SC',serif;font-size:16px;
+    color:var(--silver);opacity:.35;letter-spacing:3px;
+  }
+
+  /* ── ③ ルーレットボタン ── */
+  .spin-wrap{display:flex;flex-direction:column;align-items:center;gap:10px;}
+  .spin-btn{
+    font-family:'Cinzel Decorative',serif;
+    font-size:13px;letter-spacing:4px;color:var(--ink);
+    background:linear-gradient(135deg,var(--gold-light),var(--gold));
+    border:none;padding:16px 0;cursor:pointer;
+    clip-path:polygon(12px 0%,100% 0%,calc(100% - 12px) 100%,0% 100%);
+    box-shadow:0 4px 24px #c9933a50,0 0 40px #c9933a20;
+    transition:all 0.3s ease;position:relative;overflow:hidden;
+    width:100%;max-width:320px;
+  }
+  .spin-btn::after{
+    content:'';position:absolute;inset:0;
+    background:linear-gradient(90deg,transparent,#ffffff30,transparent);
+    transform:translateX(-100%);transition:transform 0.4s ease;
+  }
+  .spin-btn:hover::after{transform:translateX(100%);}
+  .spin-btn:hover{box-shadow:0 6px 32px #c9933a70,0 0 60px #c9933a30;transform:translateY(-2px);}
+  .spin-btn:active{transform:translateY(0);}
+  .spin-btn:disabled{opacity:.5;cursor:not-allowed;transform:none;}
+
+  .toggle-self-btn{
+    font-family:'IM Fell English SC',serif;font-size:10px;
+    letter-spacing:3px;color:var(--silver);
+    background:transparent;border:1px solid #c9933a25;
+    padding:6px 18px;cursor:pointer;transition:all 0.3s ease;
+  }
+  .toggle-self-btn:hover,.toggle-self-btn.active{
+    border-color:var(--violet-mid);color:var(--glow);
+  }
+  .count-badge{
+    font-family:'IM Fell English SC',serif;font-size:10px;
+    color:var(--gold);letter-spacing:3px;opacity:.45;
+  }
+
+  /* ── ④ キャラ一覧 ── */
+  .characters-section{
+    background:linear-gradient(135deg,#1a083080,#0e051a80);
+    border:1px solid #c9933a22;border-radius:2px;
+    padding:22px 24px;position:relative;
+  }
+  .characters-section::before,.characters-section::after{
+    content:'✦';position:absolute;color:var(--gold);font-size:11px;opacity:.4;
+  }
+  .characters-section::before{top:9px;left:13px;}
+  .characters-section::after{bottom:9px;right:13px;}
+  .section-title{
+    font-family:'Cinzel Decorative',serif;font-size:9px;
+    color:var(--gold);letter-spacing:5px;
+    text-align:center;margin-bottom:16px;opacity:.75;
+  }
+  .char-grid{display:flex;flex-wrap:wrap;gap:7px;justify-content:center;}
+
+  .char-tag{
+    border-radius:1px;padding:5px 13px;font-size:12px;
+    letter-spacing:1px;
+    border:1px solid transparent;
+    background:#18072888;
+    transition:border-color .2s,box-shadow .2s,opacity .2s,background .2s;
+    user-select:none;
+    display:inline-flex;align-items:center;gap:3px;
+  }
+  /* ピンモード中はポインタ */
+  body.pin-mode-active .char-tag{cursor:pointer;}
+  .char-tag .side-mark{font-size:9px;opacity:.7;line-height:1;}
+
+  /* ── ⑤ 固定・オプション ── */
+  .options-section{
+    display:flex;flex-direction:column;align-items:center;gap:14px;
+  }
+  .options-title{
+    font-family:'Cinzel Decorative',serif;font-size:9px;
+    color:var(--gold);letter-spacing:5px;opacity:.7;
+  }
+  .pin-mode-row{display:flex;gap:10px;flex-wrap:wrap;justify-content:center;}
+  .pin-mode-btn{
+    font-family:'IM Fell English SC',serif;font-size:11px;
+    letter-spacing:2px;padding:8px 20px;cursor:pointer;
+    border:1px solid;background:transparent;transition:all .25s ease;
+  }
+  .pin-mode-btn.left-btn {color:#7ec8e3;border-color:#7ec8e330;}
+  .pin-mode-btn.right-btn{color:#e3a87e;border-color:#e3a87e30;}
+  .pin-mode-btn.left-btn.active {background:#001a2840;border-color:#7ec8e388;box-shadow:0 0 12px #7ec8e328;}
+  .pin-mode-btn.right-btn.active{background:#281a0040;border-color:#e3a87e88;box-shadow:0 0 12px #e3a87e28;}
+  .pin-hint{font-size:10px;color:var(--silver);opacity:.38;letter-spacing:1px;text-align:center;}
+
+  .sub-btn-row{display:flex;gap:10px;flex-wrap:wrap;justify-content:center;}
+  .sub-btn{
+    font-family:'IM Fell English SC',serif;font-size:10px;
+    letter-spacing:3px;color:var(--silver);
+    background:transparent;border:1px solid #ffffff18;
+    padding:7px 18px;cursor:pointer;transition:all .25s ease;
+  }
+  .sub-btn:hover{border-color:#ffffff40;color:var(--parchment);}
+
+  /* ── 履歴 ── */
+  .history-section{display:none;}
+  .history-title{
+    font-family:'Cinzel Decorative',serif;font-size:9px;
+    color:var(--gold);letter-spacing:5px;
+    text-align:center;margin-bottom:16px;opacity:.6;
+  }
+  .history-list{
+    display:flex;flex-direction:column;gap:7px;
+    max-height:300px;overflow-y:auto;padding-right:4px;
+  }
+  .history-list::-webkit-scrollbar{width:2px;}
+  .history-list::-webkit-scrollbar-thumb{background:var(--gold);}
+  .history-item{
+    display:flex;align-items:center;
+    padding:9px 16px;border-left:2px solid #c9933a18;
+    font-size:13px;color:var(--silver);
+    animation:slideIn .35s ease;cursor:pointer;transition:border-color .25s;
+  }
+  .history-item:hover{border-left-color:var(--gold);color:var(--parchment);}
+  .history-no{
+    font-family:'IM Fell English SC',serif;font-size:10px;
+    color:var(--gold);opacity:.45;margin-right:10px;min-width:28px;
+  }
+  @keyframes slideIn{from{opacity:0;transform:translateX(-10px)}to{opacity:1;transform:translateX(0)}}
+
+  /* ── アニメ ── */
+  @keyframes spinReveal{
+    0%{opacity:0;transform:rotateY(90deg) scale(.8);filter:blur(8px);}
+    60%{filter:blur(0);}
+    100%{opacity:1;transform:rotateY(0deg) scale(1);}
+  }
+  .spinning{animation:spinReveal .6s cubic-bezier(.34,1.56,.64,1) forwards;}
+
+  /* ── パーティクル ── */
+  .magic-particles{position:fixed;inset:0;pointer-events:none;z-index:999;overflow:hidden;}
+  .particle{
+    position:absolute;border-radius:50%;
+    animation:particleFly 1.5s ease-out forwards;
+  }
+  @keyframes particleFly{
+    0%{opacity:1;transform:translate(0,0) scale(1);}
+    100%{opacity:0;transform:translate(var(--tx),var(--ty)) scale(0);}
+  }
+
+  .divider{width:70px;height:1px;background:linear-gradient(90deg,transparent,var(--gold),transparent);margin:0 auto;opacity:.35;}
+
+  /* ── ネタバレダイアログ ── */
+  .dialog-overlay{
+    position:fixed;inset:0;background:#00000092;backdrop-filter:blur(4px);
+    z-index:9000;display:flex;align-items:center;justify-content:center;
+    opacity:0;pointer-events:none;transition:opacity .3s ease;
+  }
+  .dialog-overlay.open{opacity:1;pointer-events:all;}
+  .dialog-box{
+    background:linear-gradient(160deg,#1a0a38f8,#0a051af8);
+    border:1px solid #c9933a55;max-width:370px;width:90%;
+    padding:38px 30px;text-align:center;position:relative;
+    clip-path:polygon(14px 0%,100% 0%,calc(100% - 14px) 100%,0% 100%);
+    transform:translateY(18px);transition:transform .3s ease;
+  }
+  .dialog-overlay.open .dialog-box{transform:translateY(0);}
+  .dialog-title{
+    font-family:'Cinzel Decorative',serif;font-size:12px;color:#cc3344;
+    letter-spacing:3px;margin-bottom:14px;text-shadow:0 0 20px #8b1a2f80;
+  }
+  .dialog-warning{font-size:13px;color:var(--silver);line-height:2.1;margin-bottom:24px;}
+  .dialog-warning strong{color:#ff6060;}
+  .dialog-btns{display:flex;gap:12px;justify-content:center;}
+  .dialog-btn{
+    font-family:'IM Fell English SC',serif;font-size:11px;
+    letter-spacing:3px;padding:10px 22px;cursor:pointer;
+    border:1px solid;background:transparent;transition:all .25s ease;
+  }
+  .dialog-btn.confirm{color:#ff6060;border-color:#ff606048;}
+  .dialog-btn.confirm:hover{background:#30000a50;border-color:#ff6060aa;box-shadow:0 0 14px #ff606028;}
+  .dialog-btn.cancel{color:var(--silver);border-color:#ffffff1a;}
+  .dialog-btn.cancel:hover{border-color:#ffffff44;color:var(--parchment);}
+
+  /* ── ⑥ 解禁ボタン（最下部） ── */
+  .hidden-char-section{text-align:center;padding-top:16px;}
+  .secret-btn{
+    font-family:'Noto Serif JP',serif;
+    font-size:17px;letter-spacing:8px;color:#2a1a3a;
+    background:transparent;border:1px solid #ffffff06;
+    padding:10px 30px;cursor:pointer;transition:all .45s ease;
+    filter:blur(2px);
+  }
+  .secret-btn:hover{color:#553366;border-color:#ffffff12;filter:blur(1px);text-shadow:0 0 8px #44224488;}
+  .secret-btn.unlocked{
+    color:#e8d4ff;border-color:#9966cc50;filter:blur(0);
+    text-shadow:0 0 16px #cc88ff55;box-shadow:0 0 24px #6633aa18;
+    animation:unlockedPulse 3s ease-in-out infinite;
+  }
+  @keyframes unlockedPulse{0%,100%{box-shadow:0 0 24px #6633aa18}50%{box-shadow:0 0 44px #6633aa44}}
+  .yuki-banner{
+    display:none;margin-top:16px;
+    background:linear-gradient(135deg,#1e083888,#0a052088);
+    border:1px solid #9966cc40;padding:16px 22px;
+    text-align:center;animation:fadeInUp .8s ease;
+  }
+  .yuki-banner.show{display:block;}
+  @keyframes fadeInUp{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:translateY(0)}}
+  .yuki-banner p{font-size:12px;color:#bb88ff;letter-spacing:2px;margin-bottom:7px;}
+  .yuki-banner .yuki-name{font-size:20px;color:#e8d4ff;font-weight:600;text-shadow:0 0 14px #cc88ff45;}
+
+  /* ── フッター ── */
+  .site-footer {
+    margin-top: 60px;
+    padding-top: 32px;
+    text-align: center;
+  }
+  .footer-line {
+    width: 120px; height: 1px;
+    background: linear-gradient(90deg,transparent,var(--gold),transparent);
+    margin: 0 auto 24px; opacity:.3;
+  }
+  .footer-fan {
+    font-family:'Noto Serif JP',serif;
+    font-size: 11px; color:var(--silver);
+    opacity:.55; line-height:2; letter-spacing:1px;
+    margin-bottom:12px;
+  }
+  .footer-credit {
+    font-family:'IM Fell English SC',serif;
+    font-size:11px; color:var(--gold);
+    opacity:.4; letter-spacing:2px; margin-bottom:4px;
+  }
+  .footer-tool {
+    font-family:'IM Fell English SC',serif;
+    font-size:10px; color:var(--silver);
+    opacity:.3; letter-spacing:3px;
+  }
+</style>
+</head>
+<body>
+
+<div class="magic-particles" id="particles"></div>
+
+<!-- ネタバレダイアログ -->
+<div class="dialog-overlay" id="spoilerDialog">
+  <div class="dialog-box">
+    <div class="corner corner-tl"></div><div class="corner corner-tr"></div>
+    <div class="corner corner-bl"></div><div class="corner corner-br"></div>
+    <p class="dialog-title">⚠ Spoiler Warning ⚠</p>
+    <p class="dialog-warning">
+      このボタンを押すと<br>
+      <strong>ゲームのネタバレ</strong>を含む<br>
+      隠しキャラクターが解禁されます。<br><br>
+      本編クリア後の方のみ推奨します。
+    </p>
+    <div class="dialog-btns">
+      <button class="dialog-btn confirm" onclick="unlockYuki()">解禁する</button>
+      <button class="dialog-btn cancel"  onclick="closeDialog()">戻る</button>
+    </div>
+  </div>
+</div>
+
+<div class="wrapper">
+
+  <!-- ① タイトル -->
+  <header>
+    <span class="header-ornament">✦ ✦ ✦</span>
+    <p class="title-sub-game">魔法少女ノ魔女裁判</p>
+    <h1>Coupling Roulette</h1>
+    <p class="title-sub-jp">カップリング ルーレット</p>
+    <div class="header-line"></div>
+  </header>
+
+  <!-- ② ルーレット結果 -->
+  <div class="couple-card" id="coupleCard">
+    <div class="corner corner-tl"></div><div class="corner corner-tr"></div>
+    <div class="corner corner-bl"></div><div class="corner corner-br"></div>
+    <div id="coupleContent" style="width:100%">
+      <p class="placeholder-text">— Press the Roulette —</p>
+    </div>
+    <div class="rating-row" id="ratingRow" style="display:none;">
+      <span class="star" data-r="1">✦</span>
+      <span class="star" data-r="2">✦</span>
+      <span class="star" data-r="3">✦</span>
+      <span class="star" data-r="4">✦</span>
+      <span class="star" data-r="5">✦</span>
+    </div>
+  </div>
+
+  <!-- ③ ルーレットボタン -->
+  <div class="spin-wrap">
+    <button class="spin-btn" id="spinBtn" onclick="spin()">✦ ルーレット ✦</button>
+    <button class="toggle-self-btn" id="selfToggle" onclick="toggleSelf()">自カプ含む</button>
+    <p class="count-badge" id="countBadge"></p>
+  </div>
+
+  <!-- ④ キャラ一覧 -->
+  <div class="characters-section">
+    <p class="section-title">✦ Characters ✦</p>
+    <div class="char-grid" id="charGrid"></div>
+  </div>
+
+  <!-- ⑤ 固定・オプション -->
+  <div class="options-section">
+    <p class="options-title">✦ Options ✦</p>
+    <div class="pin-mode-row">
+      <button class="pin-mode-btn left-btn"  id="leftPinBtn"  onclick="activatePinMode('left')">◀ 左固定モード</button>
+      <button class="pin-mode-btn right-btn" id="rightPinBtn" onclick="activatePinMode('right')">右固定モード ▶</button>
+    </div>
+    <p class="pin-hint" id="pinHint">モードをONにしてキャラをクリックすると固定（もう一度で解除）</p>
+    <div class="sub-btn-row">
+      <button class="sub-btn" onclick="clearPins()">固定全解除</button>
+      <button class="sub-btn" onclick="clearHistory()">履歴クリア</button>
+    </div>
+  </div>
+
+  <div class="divider"></div>
+
+  <!-- 履歴 -->
+  <div class="history-section" id="historySection">
+    <p class="history-title">✦ History ✦</p>
+    <div class="history-list" id="historyList"></div>
+  </div>
+
+  <!-- ⑥ ユキ解禁（最下部） -->
+  <div class="hidden-char-section">
+    <button class="secret-btn" id="secretBtn" onclick="openDialog()">?? ??</button>
+    <div class="yuki-banner" id="yukiBanner">
+      <p>✦ Hidden Character Unlocked ✦</p>
+      <p class="yuki-name">月代 ユキ</p>
+    </div>
+  </div>
+
+  <!-- フッター -->
+  <footer class="site-footer">
+    <div class="footer-line"></div>
+    <p class="footer-fan">
+      本ツールはファンによる非公式の二次創作コンテンツです。<br>
+      原作および公式とは一切関係ありません。
+    </p>
+    <p class="footer-credit">
+      © 魔法少女ノ魔女裁判 / 公式制作チーム
+    </p>
+    <p class="footer-tool">
+      Fan Tool &mdash; Coupling Roulette
+    </p>
+  </footer>
+
+</div>
+
+<script>
+// ===================================================
+// キャラクターデータ
+// sidePin: null | 'left' | 'right'
+//   → そのキャラがルーレット結果に出るとき、
+//     必ずその側（左 or 右）の位置に表示される
+// ===================================================
+const CHARS = [
+  { name:"桜羽エマ",    color:"#e8829a", glow:"#ff6088" },
+  { name:"二階堂ヒロ",  color:"#cc4422", glow:"#ff3300" },
+  { name:"夏目アンアン",color:"#c09ae0", glow:"#aa66dd" },
+  { name:"城ケ崎ノア",  color:"#e8e8e8", glow:"#ffffff", rainbow:true },
+  { name:"蓮見レイア",  color:"#d4a830", glow:"#f0c030" },
+  { name:"佐伯ミリア",  color:"#d8cc80", glow:"#eedd88" },
+  { name:"宝生マーゴ",  color:"#8844bb", glow:"#aa55ee" },
+  { name:"黒部ナノカ",  color:"#4466aa", glow:"#2244cc" },
+  { name:"紫藤アリサ",  color:"#dd3333", glow:"#ff2222" },
+  { name:"橘シェリー",  color:"#2299bb", glow:"#00aacc" },
+  { name:"遠野ハンナ",  color:"#88cc88", glow:"#66bb66" },
+  { name:"沢渡ココ",    color:"#dd7722", glow:"#ff8800" },
+  { name:"氷上メルル",  color:"#88ccee", glow:"#aaddff" },
+];
+// サイドピンは各キャラのオブジェクトに直接保持（mutable）
+CHARS.forEach(c => { c.sidePin = null; });
+
+const YUKI = { name:"月代ユキ", color:"#e8e8ff", glow:"#ffffff", sidePin:null };
+
+let yukiUnlocked = false;
+let includeSelf  = false;
+let pinMode      = null; // 'left' | 'right' | null
+let history      = [];
+
+function getList() {
+  return yukiUnlocked ? [...CHARS, YUKI] : [...CHARS];
+}
+
+// ===================================================
+// ノア用：レインボーグラデ HTML
+// ===================================================
+function nameHtml(ch) {
+  if (ch.rainbow) {
+    return `<span class="char-name" style="
+      background-image:linear-gradient(90deg,#ffffff,#88ccff,#ff9999,#ffee66,#99ee99,#ffffff);
+      background-clip:text;-webkit-background-clip:text;color:transparent;
+      text-shadow:none;display:inline-block;">${ch.name}</span>`;
+  }
+  return `<span class="char-name" style="color:${ch.color};text-shadow:0 0 22px ${ch.glow}55">${ch.name}</span>`;
+}
+
+// ===================================================
+// キャラグリッド描画
+// ===================================================
+function buildCharGrid() {
+  const grid = document.getElementById('charGrid');
+  grid.innerHTML = '';
+  getList().forEach(ch => {
+    const tag = document.createElement('div');
+    tag.className = 'char-tag';
+    tag.dataset.name = ch.name;
+    tag.onclick = () => handleTagClick(ch);
+    grid.appendChild(tag);
+    applyTagStyle(tag, ch);
+  });
+}
+
+function applyTagStyle(tag, ch) {
+  // 色
+  if (ch.rainbow) {
+    tag.style.backgroundImage = 'linear-gradient(90deg,#e8e8e8,#88ccff,#ff9999,#ffee66,#99ee99)';
+    tag.style.backgroundClip  = 'text';
+    tag.style.webkitBackgroundClip = 'text';
+    tag.style.color = 'transparent';
+    tag.style.borderColor = '#cccccc44';
+    tag.style.boxShadow = '0 0 8px #ffffff18';
+  } else {
+    tag.style.backgroundImage = '';
+    tag.style.backgroundClip  = '';
+    tag.style.webkitBackgroundClip = '';
+    tag.style.color = ch.color;
+    tag.style.borderColor = ch.color + '44';
+    tag.style.boxShadow = `0 0 7px ${ch.color}18`;
+  }
+
+  // 固定マーク
+  let mark = '';
+  if (ch.sidePin === 'left')  mark = '◀';
+  if (ch.sidePin === 'right') mark = '▶';
+
+  tag.innerHTML = `<span>${ch.name}</span>${mark ? `<span class="side-mark">${mark}</span>` : ''}`;
+}
+
+function refreshAllTags() {
+  getList().forEach(ch => {
+    const tag = document.querySelector(`.char-tag[data-name="${CSS.escape(ch.name)}"]`);
+    if (tag) applyTagStyle(tag, ch);
+  });
+}
+
+// ===================================================
+// 固定モード
+// ===================================================
+function activatePinMode(side) {
+  pinMode = (pinMode === side) ? null : side;
+  document.getElementById('leftPinBtn').classList.toggle('active',  pinMode === 'left');
+  document.getElementById('rightPinBtn').classList.toggle('active', pinMode === 'right');
+  document.body.classList.toggle('pin-mode-active', pinMode !== null);
+
+  const hint = document.getElementById('pinHint');
+  if      (pinMode === 'left')  hint.textContent = '◀ 左固定したいキャラをクリック（もう一度で解除）';
+  else if (pinMode === 'right') hint.textContent = '▶ 右固定したいキャラをクリック（もう一度で解除）';
+  else                          hint.textContent = 'モードをONにしてキャラをクリックすると固定（もう一度で解除）';
+}
+
+function handleTagClick(ch) {
+  if (!pinMode) return;
+  // 同じ側をもう一度押したら解除、それ以外は設定
+  ch.sidePin = (ch.sidePin === pinMode) ? null : pinMode;
+  refreshAllTags();
+}
+
+function clearPins() {
+  getList().forEach(ch => { ch.sidePin = null; });
+  pinMode = null;
+  document.getElementById('leftPinBtn').classList.remove('active');
+  document.getElementById('rightPinBtn').classList.remove('active');
+  document.body.classList.remove('pin-mode-active');
+  document.getElementById('pinHint').textContent = 'モードをONにしてキャラをクリックすると固定（もう一度で解除）';
+  refreshAllTags();
+}
+
+// ===================================================
+// スピン
+// ===================================================
+function spin() {
+  const list = getList();
+  if (list.length < (includeSelf ? 1 : 2)) return;
+
+  // 2名ランダム選出
+  let iA = Math.floor(Math.random() * list.length);
+  let iB;
+  let tries = 0;
+  do {
+    iB = Math.floor(Math.random() * list.length);
+    tries++;
+  } while (!includeSelf && iB === iA && tries < 200);
+  if (!includeSelf && iA === iB) return;
+
+  let chA = list[iA];
+  let chB = list[iB];
+
+  // ── 左右固定ロジック ──
+  // chA と chB の sidePin を見て、どちらを左(表示A)にするか決める
+  // ・どちらかが 'left' 固定 → そちらを左
+  // ・どちらかが 'right' 固定 → そちらを右（= もう片方が左）
+  // ・両方 null → そのまま（chA左、chB右）
+  // ・競合（両方 left、両方 right）→ ランダム順維持
+  let left  = chA;
+  let right = chB;
+
+  const aL = chA.sidePin === 'left';
+  const aR = chA.sidePin === 'right';
+  const bL = chB.sidePin === 'left';
+  const bR = chB.sidePin === 'right';
+
+  if (!aL && !aR && !bL && !bR) {
+    // 両方未固定 → そのまま
+  } else if ((aL && !bL) || (bR && !aR)) {
+    // A を左、B を右
+    left = chA; right = chB;
+  } else if ((aR && !bR) || (bL && !aL)) {
+    // A を右、B を左 → swap
+    left = chB; right = chA;
+  }
+  // それ以外（競合）はそのまま
+
+  showCouple(left, right);
+}
+
+function showCouple(a, b) {
+  document.getElementById('spinBtn').disabled = true;
+  spawnParticles();
+
+  const content = document.getElementById('coupleContent');
+  content.innerHTML = `
+    <div class="pair-row">
+      ${nameHtml(a)}
+      <span class="coupling-symbol">×</span>
+      ${nameHtml(b)}
+    </div>
+  `;
+  content.classList.remove('spinning');
+  void content.offsetWidth;
+  content.classList.add('spinning');
+
+  const rr = document.getElementById('ratingRow');
+  rr.style.display = 'flex';
+  document.querySelectorAll('.star').forEach(s => {
+    s.classList.remove('lit');
+    s.style.color = 'var(--gold)'; s.style.textShadow = '';
+    setTimeout(() => s.classList.add('lit'), 400 + parseInt(s.dataset.r) * 80);
+  });
+
+  addHistory(a, b);
+  document.getElementById('countBadge').textContent = `Total: ${history.length} pairs`;
+  setTimeout(() => { document.getElementById('spinBtn').disabled = false; }, 700);
+}
+
+// ===================================================
+// 履歴
+// ===================================================
+function addHistory(a, b) {
+  history.unshift([a, b]);
+  if (history.length > 50) history.pop();
+
+  const sec  = document.getElementById('historySection');
+  const list = document.getElementById('historyList');
+  sec.style.display = 'block';
+
+  const spanA = a.rainbow
+    ? `<span style="background-image:linear-gradient(90deg,#e8e8e8,#88ccff,#ff9999);background-clip:text;-webkit-background-clip:text;color:transparent">${a.name}</span>`
+    : `<span style="color:${a.color}">${a.name}</span>`;
+  const spanB = b.rainbow
+    ? `<span style="background-image:linear-gradient(90deg,#e8e8e8,#88ccff,#ff9999);background-clip:text;-webkit-background-clip:text;color:transparent">${b.name}</span>`
+    : `<span style="color:${b.color}">${b.name}</span>`;
+
+  const item = document.createElement('div');
+  item.className = 'history-item';
+  item.innerHTML = `
+    <span class="history-no">#1</span>
+    ${spanA}
+    <span style="color:var(--gold);margin:0 8px;font-size:10px">×</span>
+    ${spanB}
+  `;
+  item.onclick = () => showCouple(a, b);
+  list.insertBefore(item, list.firstChild);
+  list.querySelectorAll('.history-no').forEach((el, i) => { el.textContent = `#${i+1}`; });
+}
+
+function clearHistory() {
+  history = [];
+  document.getElementById('historyList').innerHTML = '';
+  document.getElementById('historySection').style.display = 'none';
+  document.getElementById('countBadge').textContent = '';
+}
+
+// ===================================================
+// 自カプ
+// ===================================================
+function toggleSelf() {
+  includeSelf = !includeSelf;
+  document.getElementById('selfToggle').classList.toggle('active', includeSelf);
+}
+
+// ===================================================
+// スター
+// ===================================================
+document.querySelectorAll('.star').forEach(star => {
+  star.addEventListener('click', function() {
+    const r = parseInt(this.dataset.r);
+    document.querySelectorAll('.star').forEach((s,i) => {
+      s.style.color      = i < r ? '#f0c060' : 'var(--gold)';
+      s.style.textShadow = i < r ? '0 0 14px #f0c06075' : '';
+    });
+  });
+  star.addEventListener('mouseenter', function() {
+    const r = parseInt(this.dataset.r);
+    document.querySelectorAll('.star').forEach((s,i) => { s.style.opacity = i < r ? '1' : '0.35'; });
+  });
+  star.addEventListener('mouseleave', () => {
+    document.querySelectorAll('.star').forEach(s => { s.style.opacity = '1'; });
+  });
+});
+
+// ===================================================
+// パーティクル
+// ===================================================
+function spawnParticles(cx, cy, colors, count) {
+  const container = document.getElementById('particles');
+  if (cx == null) {
+    const rect = document.getElementById('coupleCard').getBoundingClientRect();
+    cx = rect.left + rect.width / 2; cy = rect.top + rect.height / 2;
+  }
+  colors = colors || ['#f0c060','#e8c4ff','#ffd4e8','#c4a8e0','#ffffff'];
+  count  = count  || 22;
+  for (let i = 0; i < count; i++) {
+    const p = document.createElement('div');
+    p.className = 'particle';
+    const angle = Math.random() * Math.PI * 2;
+    const dist  = 80 + Math.random() * 170;
+    p.style.cssText = `
+      left:${cx}px;top:${cy}px;
+      background:${colors[Math.floor(Math.random()*colors.length)]};
+      --tx:${Math.cos(angle)*dist}px;--ty:${Math.sin(angle)*dist}px;
+      width:${2+Math.random()*4}px;height:${2+Math.random()*4}px;
+      animation-delay:${Math.random()*0.25}s;
+      animation-duration:${0.8+Math.random()*0.8}s;
+    `;
+    container.appendChild(p);
+    setTimeout(() => p.remove(), 2200);
+  }
+}
+
+// ===================================================
+// ユキ解禁
+// ===================================================
+function openDialog()  {
+  if (yukiUnlocked) return;
+  document.getElementById('spoilerDialog').classList.add('open');
+}
+function closeDialog() {
+  document.getElementById('spoilerDialog').classList.remove('open');
+}
+function unlockYuki()  {
+  yukiUnlocked = true;
+  closeDialog();
+  const btn = document.getElementById('secretBtn');
+  btn.textContent = '月代 ユキ';
+  btn.classList.add('unlocked');
+  document.getElementById('yukiBanner').classList.add('show');
+  buildCharGrid();
+  spawnParticles(window.innerWidth/2, window.innerHeight-80,
+    ['#cc99ff','#aa66ff','#e8d4ff','#ffffff'], 44);
+}
+
+// ===================================================
+// キーボード
+// ===================================================
+document.addEventListener('keydown', e => {
+  if (document.getElementById('spoilerDialog').classList.contains('open')) {
+    if (e.code === 'Escape') closeDialog();
+    return;
+  }
+  if (e.code === 'Space' || e.code === 'Enter') { e.preventDefault(); spin(); }
+});
+document.getElementById('spoilerDialog').addEventListener('click', function(e) {
+  if (e.target === this) closeDialog();
+});
+
+// ===================================================
+// 初期化
+// ===================================================
+buildCharGrid();
+</script>
+</body>
+</html>
