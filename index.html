@@ -169,6 +169,14 @@
   .toggle-self-btn:hover,.toggle-self-btn.active{
     border-color:var(--violet-mid);color:var(--glow);
   }
+  .exclude-row{display:flex;justify-content:center;}
+  .exclude-btn{color:#ee6666;border-color:#ee666630;}
+  .exclude-btn.active{background:#2a000040;border-color:#ee6666aa;box-shadow:0 0 12px #ee666628;}
+  /* 除外されたキャラタグ */
+  .char-tag.excluded{
+    opacity:.28;text-decoration:line-through;
+    filter:grayscale(60%);
+  }
   .count-badge{
     font-family:'IM Fell English SC',serif;font-size:10px;
     color:var(--gold);letter-spacing:3px;opacity:.45;
@@ -422,7 +430,6 @@
   <!-- ③ ルーレットボタン -->
   <div class="spin-wrap">
     <button class="spin-btn" id="spinBtn" onclick="spin()">✦ ルーレット ✦</button>
-    <button class="toggle-self-btn" id="selfToggle" onclick="toggleSelf()">自カプ含む</button>
     <p class="count-badge" id="countBadge"></p>
   </div>
 
@@ -440,8 +447,16 @@
       <button class="pin-mode-btn right-btn" id="rightPinBtn" onclick="activatePinMode('right')">右固定モード ▶</button>
     </div>
     <p class="pin-hint" id="pinHint">モードをONにしてキャラをクリックすると固定（もう一度で解除）</p>
+    <!-- 除外モード -->
+    <div class="exclude-row">
+      <button class="pin-mode-btn exclude-btn" id="excludeBtn" onclick="activateExcludeMode()">✕ 除外モード</button>
+    </div>
+    <p class="pin-hint" id="excludeHint" style="display:none;">除外したいキャラをクリック（もう一度で解除）</p>
+    <!-- 自カプ -->
+    <button class="toggle-self-btn" id="selfToggle" onclick="toggleSelf()">自カプ含む</button>
     <div class="sub-btn-row">
       <button class="sub-btn" onclick="clearPins()">固定全解除</button>
+      <button class="sub-btn" onclick="clearExcludes()">除外全解除</button>
       <button class="sub-btn" onclick="clearHistory()">履歴クリア</button>
     </div>
   </div>
@@ -503,7 +518,7 @@ const CHARS = [
   { name:"氷上メルル",  color:"#88ccee", glow:"#aaddff" },
 ];
 // サイドピンは各キャラのオブジェクトに直接保持（mutable）
-CHARS.forEach(c => { c.sidePin = null; });
+CHARS.forEach(c => { c.sidePin = null; c.excluded = false; });
 
 const YUKI = { name:"月代ユキ", color:"#e8e8ff", glow:"#ffffff", sidePin:null };
 
@@ -569,6 +584,9 @@ function applyTagStyle(tag, ch) {
   if (ch.sidePin === 'right') mark = '▶';
 
   tag.innerHTML = `<span>${ch.name}</span>${mark ? `<span class="side-mark">${mark}</span>` : ''}`;
+  // 除外スタイル
+  if (ch.excluded) tag.classList.add('excluded');
+  else             tag.classList.remove('excluded');
 }
 
 function refreshAllTags() {
@@ -594,8 +612,12 @@ function activatePinMode(side) {
 }
 
 function handleTagClick(ch) {
+  if (excludeMode) {
+    ch.excluded = !ch.excluded;
+    refreshAllTags();
+    return;
+  }
   if (!pinMode) return;
-  // 同じ側をもう一度押したら解除、それ以外は設定
   ch.sidePin = (ch.sidePin === pinMode) ? null : pinMode;
   refreshAllTags();
 }
@@ -617,18 +639,25 @@ function spin() {
   const list = getList();
   if (list.length < (includeSelf ? 1 : 2)) return;
 
+  // 除外キャラを除いたプールを作成
+  const pool = list.filter(ch => !ch.excluded);
+  if (pool.length < (includeSelf ? 1 : 2)) {
+    alert('除外を解除してください（候補が少なすぎます）');
+    return;
+  }
+
   // 2名ランダム選出
-  let iA = Math.floor(Math.random() * list.length);
+  let iA = Math.floor(Math.random() * pool.length);
   let iB;
   let tries = 0;
   do {
-    iB = Math.floor(Math.random() * list.length);
+    iB = Math.floor(Math.random() * pool.length);
     tries++;
   } while (!includeSelf && iB === iA && tries < 200);
   if (!includeSelf && iA === iB) return;
 
-  let chA = list[iA];
-  let chB = list[iB];
+  let chA = pool[iA];
+  let chB = pool[iB];
 
   // ── 左右固定ロジック ──
   // chA と chB の sidePin を見て、どちらを左(表示A)にするか決める
@@ -730,7 +759,32 @@ function clearHistory() {
 // ===================================================
 function toggleSelf() {
   includeSelf = !includeSelf;
-  document.getElementById('selfToggle').classList.toggle('active', includeSelf);
+  const btn = document.getElementById('selfToggle');
+  btn.classList.toggle('active', includeSelf);
+  btn.textContent = includeSelf ? '自カプ含む ✦' : '自カプ含む';
+}
+
+// ===================================================
+// 除外モード
+// ===================================================
+let excludeMode = false;
+
+function activateExcludeMode() {
+  excludeMode = !excludeMode;
+  document.getElementById('excludeBtn').classList.toggle('active', excludeMode);
+  document.getElementById('excludeHint').style.display = excludeMode ? 'block' : 'none';
+  // 除外モード中はキャラタグをポインタに
+  if (excludeMode) {
+    document.body.classList.add('pin-mode-active');
+  } else if (!pinMode) {
+    document.body.classList.remove('pin-mode-active');
+  }
+}
+
+function clearExcludes() {
+  getList().forEach(ch => { ch.excluded = false; });
+  YUKI.excluded = false;
+  refreshAllTags();
 }
 
 // ===================================================
